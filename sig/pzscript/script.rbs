@@ -1,0 +1,81 @@
+type ruby_primitive = String | Integer | Float | bool
+
+module Pzscript
+  module Script
+    class Array
+      def each: { (ruby_primitive) -> void } -> void
+              | -> Enumerator[ruby_primitive, void]
+      def to_ruby: -> ::Array[ruby_primitive]
+    end
+
+    class Definition
+      def name: -> String
+      def value: -> ruby_primitive
+    end
+
+    class Definitions
+      include Enumerable[Definition]
+
+      def each: { (Definition) -> void } -> void
+      def to_h: -> ::Hash[String, ruby_primitive]
+    end
+
+    class False
+      def to_ruby: -> false
+    end
+
+    class Hash
+      include Enumerable[[String, ruby_primitive]]
+
+      def each: { ([String, ruby_primitive]) -> void } -> void
+              | { (String, ruby_primitive) -> void } -> void
+      def to_h: -> ::Hash[String, ruby_primitive]
+    end
+
+    class Identifier
+      def to_s: -> String
+      def to_ruby: -> String
+    end
+
+    class Integer
+      def to_i: -> Integer
+      def to_ruby: -> Integer
+    end
+
+    class Item
+      def id: -> String
+      def full_id: -> String
+      def raw_source: -> String
+      def properties: -> ::Hash[String, ruby_primitive]
+    end
+
+    class Items
+      def full_id: -> String
+      def each: { (Item) -> void } -> void
+      def []: (String) -> Item?
+    end
+
+    class Module
+      def id: -> String
+      def full_id: -> String
+      def items: -> ::Array[Script::Item]
+    end
+
+    class ModuleBlock
+      def full_id: -> String
+    end
+
+    class SubPair
+      def to_ruby: -> [ruby_primitive, ruby_primitive]
+    end
+
+    class True
+      def to_ruby: -> true
+    end
+
+    class Word
+      def to_s: -> String
+      def to_ruby: -> String
+    end
+  end
+end

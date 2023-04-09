@@ -1,0 +1,107 @@
+module Pzscript
+  grammar Script
+    rule root
+      module / item / hash / array
+    end
+
+    rule module
+      'module' space identifier space? block:module_block <Module>
+    end
+
+    rule module_block
+      space? lparen space? items space? rparen space? <ModuleBlock>
+    end
+
+    rule items
+      item* <Items>
+    end
+
+    rule item
+      space? 'item' space identifier space? block <Item>
+    end
+
+    rule block
+      space? lparen space? definitions space? rparen
+    end
+
+    rule definitions
+      definition* <Definitions>
+    end
+
+    rule definition
+      identifier space? '=' space? rvalue:(array / hash / value / '') ','? space? <Definition>
+    end
+
+    rule identifier
+      [a-zA-Z0-9_.]+ <Identifier>
+    end
+
+    rule value
+      (digiword / float / integer / boolean / word)
+    end
+
+    rule digiword
+      [0-9] [a-zA-Z] word <Word>
+    end
+
+    rule integer
+     [+-]? [0-9]+ <Integer>
+    end
+
+    rule float
+      [+-]? ([0-9]*)? '.' [0-9]+ ('e' [+-]? [0-9]+)? <Float>
+    end
+
+    rule boolean
+      true / false
+    end
+
+    rule true
+      'TRUE' <True> / 'true' <True>
+    end
+
+    rule false
+      'FALSE' <False> / 'false' <False>
+    end
+
+    rule array
+      head:value tail:(separator value)+ <Array>
+    end
+
+    rule hash
+      head:pair tail:(separator pair)* <Hash>
+    end
+
+    rule pair
+      key:word delimiter value:(subpair / value)
+    end
+
+    rule subpair
+      value '|' value <SubPair>
+    end
+
+    rule delimiter
+      ':'
+    end
+
+    rule separator
+      ';'
+    end
+
+    rule word
+      [a-zA-Z0-9_ \-/.']+ <Word>
+    end
+
+    rule lparen
+      '{'
+    end
+
+    rule rparen
+      '}'
+    end
+
+    rule space
+      [\s\n\t\r]*
+    end
+  end
+end

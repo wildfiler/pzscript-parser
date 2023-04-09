@@ -1,0 +1,8 @@
+module Pzscript
+  module Parser
+    VERSION: String
+    # See the writing guide of rbs: https://github.com/ruby/rbs#guides
+
+    def self.parse: (String) -> (Script::Module | Script::Item | Script::Array | Script::Hash)
+  end
+end
